@@ -5,11 +5,17 @@ var fs = require('fs');
 require('dotenv').config(); // process.env.DB_CONNECT
 
 var mongoose = require('mongoose');
-const Person = require('./models/Person')  //Person Model
+const Entry = require('./models/Entry')  //Person Model
 
 ;//  -------- Connect to database ---------------
 mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () => {console.log("DB Connected")} );
 
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  // we're connected!
+  console.log("We are Connected")
+});
 
 const path = require('path');
 var PORT = 8080;
@@ -67,7 +73,7 @@ app.post('/api/formdata', function(req, res, next){
 app.post('/api/mongodb', function(req, res){ 
     console.log(req.body);
 
-   const post = new Person({
+   const post = new Entry({
        fullname : req.body.fullname,
        entries : req.body.entries,
        seller : req.body.seller
@@ -75,11 +81,27 @@ app.post('/api/mongodb', function(req, res){
 
    console.log(req.body.fullname);
 
-//    post.save()
-//    .then(data => {  res.json(data);  })
-//    .catch(err => { res.json({ message: err})});
+//    fluffy.save(function (err, fluffy) {
+//     if (err) return console.error(err);
+//     fluffy.speak();
+//   });
+
+   post.save()
+   .then(data => {  res.json(data);  })
+   .catch(err => { res.json({ message: err})});
 
 }); 
+
+app.get('/api/mongodb', function(req, res){ 
+
+    Entry.find(function (err, mydata) {
+        if (err) return console.error(err);
+        console.log(mydata);
+        res.json(mydata); 
+      })
+
+}); 
+
 
 app.get('/api/download', function(req, res, next){ 
 

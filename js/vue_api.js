@@ -12,7 +12,7 @@
       sendregistration : function() {
         if (this.fullname && this.entries && this.seller)
             {
-            axios.post('/api/formdata',
+            axios.post('/api/mongodb',
             { fullname: this.fullname, entries: this.entries, seller: this.seller })
             .then(response => this.responseData = response.data)
             .catch(error => {});
