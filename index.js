@@ -2,22 +2,30 @@ var express = require('Express');
 var bodyParser = require('body-parser');
 var app = express();
 var fs = require('fs');
+require('dotenv').config(); // process.env.DB_CONNECT
+
+var mongoose = require('mongoose');
+const Person = require('./models/Person')  //Person Model
+
+;//  -------- Connect to database ---------------
+mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () => {console.log("DB Connected")} );
 
 
 const path = require('path');
 var PORT = 8080;
+
 // for parsing application/json
 app.use(bodyParser.json()); 
 
 app.use(express.static(__dirname + '/')); // Serve Static files
 
-
+var options = { 
+    root: path.join(__dirname) 
+}; 
 
 // app.use('/add', function(req, res, next){ 
      
-//     var options = { 
-//         root: path.join(__dirname) 
-//     }; 
+    
       
 //     var fileName = 'register.html'; 
 //     res.sendFile(fileName, options, function (err) { 
@@ -56,12 +64,25 @@ app.post('/api/formdata', function(req, res, next){
    
 }); 
 
+app.post('/api/mongodb', function(req, res){ 
+    console.log(req.body);
+
+   const post = new Person({
+       fullname : req.body.fullname,
+       entries : req.body.entries,
+       seller : req.body.seller
+   });
+
+   console.log(req.body.fullname);
+
+//    post.save()
+//    .then(data => {  res.json(data);  })
+//    .catch(err => { res.json({ message: err})});
+
+}); 
 
 app.get('/api/download', function(req, res, next){ 
 
-    var options = { 
-        root: path.join(__dirname) 
-    }; 
     res.setHeader('Content-Type', 'application/json');
 
     fs.readFile('data.json', 'utf8', function readFileCallback(err, data){
@@ -81,10 +102,6 @@ app.get('/api/download', function(req, res, next){
 // ERROR PAGE
 app.get('*', function(req, res, next){ 
      
-    var options = { 
-        root: path.join(__dirname) 
-    }; 
-      
     var fileName = '404.html'; 
 
     // res.sendFile(fileName, options, function (err) { 
