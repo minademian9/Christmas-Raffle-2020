@@ -11,23 +11,7 @@ app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/')); // Serve Static files
 
-app.get('*', function(req, res, next){ 
-     
-    var options = { 
-        root: path.join(__dirname) 
-    }; 
-      
-    var fileName = '404.html'; 
-    res.sendFile(fileName, options, function (err) { 
-        if (err) { 
-            next(err); 
-        } else { 
-            console.log('Sent:', fileName); 
-            next(); 
-        } 
-    }); 
 
-}); 
 
 // app.use('/add', function(req, res, next){ 
      
@@ -78,18 +62,46 @@ app.get('/api/download', function(req, res, next){
     var options = { 
         root: path.join(__dirname) 
     }; 
+    res.setHeader('Content-Type', 'application/json');
 
-    res.sendFile("data.json", options, function (err) { 
-        if (err) { 
-            next(err); 
-        } else { 
-            console.log('Sent:', "data.json"); 
-            next(); 
-        } 
-    }); 
-   
+    fs.readFile('data.json', 'utf8', function readFileCallback(err, data){
+        if (err){
+            console.log(err);
+        } else {
+        obj = JSON.parse(data); //now it an object
+        json = JSON.stringify(obj); //convert it back to json
+        res.end(json) 
+    }});
+
 }); 
-  
+
+
+
+
+// ERROR PAGE
+app.get('*', function(req, res, next){ 
+     
+    var options = { 
+        root: path.join(__dirname) 
+    }; 
+      
+    var fileName = '404.html'; 
+
+    // res.sendFile(fileName, options, function (err) { 
+    //     if (err) { 
+    //         next(err); 
+    //     } else { 
+    //         console.log('Sent:', fileName); 
+    //         next(); 
+    //     } 
+    // }); 
+
+    res.sendFile(fileName, options, function() {}); 
+
+    // res.sendStatus(404)
+
+}); 
+
   
 app.listen(PORT, function(err){ 
     if (err) console.log(err); 

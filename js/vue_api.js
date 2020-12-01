@@ -12,7 +12,7 @@
       sendregistration : function() {
         if (this.fullname && this.entries && this.seller)
             {
-            axios.post('http://localhost:8080/api/formdata',
+            axios.post('/api/formdata',
             { fullname: this.fullname, entries: this.entries, seller: this.seller })
             .then(response => this.responseData = response.data)
             .catch(error => {});
