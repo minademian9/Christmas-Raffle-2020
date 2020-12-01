@@ -1,0 +1,14 @@
+{
+  "name": "tombola-2020",
+  "version": "1.0.0",
+  "description": "raffle app",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "Mina D",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
