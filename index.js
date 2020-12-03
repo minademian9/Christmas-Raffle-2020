@@ -18,7 +18,8 @@ db.once('open', function() {
 });
 
 const path = require('path');
-var PORT = 8080;
+
+var port = process.env.PORT || 8080;
 
 // for parsing application/json
 app.use(bodyParser.json()); 
@@ -142,7 +143,7 @@ app.get('*', function(req, res, next){
 }); 
 
   
-app.listen(PORT, function(err){ 
+app.listen(port, function(err){ 
     if (err) console.log(err); 
-    console.log("Server listening on PORT", PORT); 
+    console.log("Server listening on PORT", port); 
 });
