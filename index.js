@@ -1,4 +1,4 @@
-var express = require('Express');
+var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var fs = require('fs');
@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 const Entry = require('./models/Entry')  //Person Model
 
 ;//  -------- Connect to database ---------------
-mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () => {console.log("DB Connected")} );
+mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true },{useUnifiedTopology: true }, () => {console.log("DB Connected")} );
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -79,8 +79,6 @@ app.post('/api/mongodb', function(req, res){
        entries : req.body.entries,
        seller : req.body.seller
    });
-
-   console.log(req.body.fullname);
 
 //    fluffy.save(function (err, fluffy) {
 //     if (err) return console.error(err);
